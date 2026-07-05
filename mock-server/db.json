@@ -1,0 +1,36 @@
+{
+  "tasks": [
+    {
+      "id": "sample-1",
+      "title": "Inspect HVAC unit at Client Site A",
+      "description": "Quarterly maintenance inspection of the rooftop HVAC unit. Check filters, refrigerant levels and thermostat calibration.",
+      "dueDate": "2026-07-10T14:00:00.000Z",
+      "location": {
+        "address": "Client Site A — 45 Park Ave",
+        "latitude": 40.7527,
+        "longitude": -73.9772
+      },
+      "status": "new",
+      "attachments": [],
+      "deleted": false,
+      "createdAt": "2026-07-01T09:00:00.000Z",
+      "updatedAt": "2026-07-01T09:00:00.000Z"
+    },
+    {
+      "id": "sample-2",
+      "title": "Replace network switch at Warehouse North",
+      "description": "Swap the failing 24-port switch in rack B3. Label all patch cables before disconnecting.",
+      "dueDate": "2026-07-08T10:30:00.000Z",
+      "location": {
+        "address": "Warehouse North — 12 Industrial Rd",
+        "latitude": 40.7357,
+        "longitude": -74.1724
+      },
+      "status": "in_progress",
+      "attachments": [],
+      "deleted": false,
+      "createdAt": "2026-07-02T08:15:00.000Z",
+      "updatedAt": "2026-07-03T11:40:00.000Z"
+    }
+  ]
+}

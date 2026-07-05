@@ -37,6 +37,12 @@ const config: ExpoConfig = {
   web: {
     favicon: './assets/favicon.png',
   },
+  extra: {
+    eas: {
+      projectId: '7b44ebe4-8929-4601-9e80-d56f060c205a',
+    },
+  },
+  owner: 'dnlkkk',
   plugins: [
     '@react-native-community/datetimepicker',
     ['expo-notifications', {}],

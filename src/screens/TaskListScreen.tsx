@@ -103,18 +103,22 @@ export function TaskListScreen({ navigation }: Props) {
         ListEmptyComponent={
           totalTasks === 0 ? (
             <EmptyState
-              icon="🗒️"
+              icon="clipboard-outline"
               title="No tasks yet"
               subtitle="Create your first field task with the button below."
             />
           ) : (
-            <EmptyState icon="🔍" title="Nothing found" subtitle="Try a different search or filter." />
+            <EmptyState
+              icon="search-outline"
+              title="Nothing found"
+              subtitle="Try a different search or filter."
+            />
           )
         }
       />
 
       <View style={styles.fabWrapper}>
-        <AppButton label="+ New Task" onPress={() => navigation.navigate('TaskForm', {})} />
+        <AppButton icon="add" label="New Task" onPress={() => navigation.navigate('TaskForm', {})} />
       </View>
     </View>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -15,16 +15,15 @@ import type { RootStackParamList, TabParamList } from './types';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tabs = createBottomTabNavigator<TabParamList>();
 
-const TAB_ICONS: Record<keyof TabParamList, string> = {
-  TasksTab: '🗒️',
-  MapTab: '🗺️',
-  HistoryTab: '📜',
-  SettingsTab: '⚙️',
+const TAB_ICONS: Record<
+  keyof TabParamList,
+  { active: keyof typeof Ionicons.glyphMap; inactive: keyof typeof Ionicons.glyphMap }
+> = {
+  TasksTab: { active: 'list', inactive: 'list-outline' },
+  MapTab: { active: 'map', inactive: 'map-outline' },
+  HistoryTab: { active: 'time', inactive: 'time-outline' },
+  SettingsTab: { active: 'settings', inactive: 'settings-outline' },
 };
-
-function TabIcon({ route }: { route: keyof TabParamList }) {
-  return <Text style={{ fontSize: 18 }}>{TAB_ICONS[route]}</Text>;
-}
 
 function MainTabs() {
   const { colors } = useTheme();
@@ -34,7 +33,13 @@ function MainTabs() {
         headerShown: route.name !== 'TasksTab',
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textSecondary,
-        tabBarIcon: () => <TabIcon route={route.name} />,
+        tabBarIcon: ({ focused, color, size }) => (
+          <Ionicons
+            name={focused ? TAB_ICONS[route.name].active : TAB_ICONS[route.name].inactive}
+            size={size}
+            color={color}
+          />
+        ),
         tabBarLabelStyle: { fontSize: 12, fontWeight: '600' },
       })}
     >

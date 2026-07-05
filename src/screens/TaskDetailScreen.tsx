@@ -38,7 +38,7 @@ export function TaskDetailScreen({ navigation, route }: Props) {
   if (!task) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <EmptyState icon="🗑️" title="Task not found" subtitle="It may have been deleted." />
+        <EmptyState icon="trash-outline" title="Task not found" subtitle="It may have been deleted." />
       </View>
     );
   }
@@ -111,10 +111,22 @@ export function TaskDetailScreen({ navigation, route }: Props) {
       <AttachmentGallery attachments={task.attachments} onRemove={(id) => removeAttachment(task.id, id)} />
       <View style={styles.attachRow}>
         <View style={styles.attachButton}>
-          <AppButton label="📷 Add image" variant="secondary" onPress={() => handleAttach('image')} loading={attaching} />
+          <AppButton
+            icon="image-outline"
+            label="Add image"
+            variant="secondary"
+            onPress={() => handleAttach('image')}
+            loading={attaching}
+          />
         </View>
         <View style={styles.attachButton}>
-          <AppButton label="📄 Add file" variant="secondary" onPress={() => handleAttach('document')} loading={attaching} />
+          <AppButton
+            icon="document-outline"
+            label="Add file"
+            variant="secondary"
+            onPress={() => handleAttach('document')}
+            loading={attaching}
+          />
         </View>
       </View>
 
@@ -133,8 +145,12 @@ export function TaskDetailScreen({ navigation, route }: Props) {
       )}
 
       <View style={styles.actions}>
-        <AppButton label="Edit task" onPress={() => navigation.navigate('TaskForm', { taskId: task.id })} />
-        <AppButton label="Delete task" variant="danger" onPress={handleDelete} />
+        <AppButton
+          icon="create-outline"
+          label="Edit task"
+          onPress={() => navigation.navigate('TaskForm', { taskId: task.id })}
+        />
+        <AppButton icon="trash-outline" label="Delete task" variant="danger" onPress={handleDelete} />
       </View>
     </ScrollView>
   );

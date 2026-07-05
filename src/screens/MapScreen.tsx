@@ -37,7 +37,7 @@ export function MapScreen() {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <EmptyState
-          icon="🗺️"
+          icon="map-outline"
           title="No tasks on the map"
           subtitle="Add coordinates to a task (or pick a quick location) to see it here."
         />

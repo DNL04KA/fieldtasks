@@ -126,6 +126,7 @@ export function TaskFormScreen({ navigation, route }: Props) {
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>Due date & time *</Text>
         <AppButton
+          icon="calendar-outline"
           label={draft.dueDate ? formatDateTime(draft.dueDate.toISOString()) : 'Pick date and time'}
           variant="secondary"
           onPress={() => setPickerStage('date')}

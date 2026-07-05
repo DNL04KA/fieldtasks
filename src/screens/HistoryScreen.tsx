@@ -1,20 +1,21 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../theme/ThemeContext';
 import { useTaskStore } from '../store/taskStore';
 import { EmptyState } from '../components/EmptyState';
 import { formatDateTime } from '../utils/datetime';
 import type { HistoryAction } from '../types';
 
-const ACTION_ICONS: Record<HistoryAction, string> = {
-  created: '✨',
-  edited: '✏️',
-  status_changed: '🔄',
-  attachment_added: '📎',
-  attachment_removed: '🗑️',
-  deleted: '❌',
-  sync_success: '☁️',
-  sync_failed: '⚠️',
+const ACTION_ICONS: Record<HistoryAction, keyof typeof Ionicons.glyphMap> = {
+  created: 'add-circle-outline',
+  edited: 'create-outline',
+  status_changed: 'swap-horizontal-outline',
+  attachment_added: 'attach-outline',
+  attachment_removed: 'close-circle-outline',
+  deleted: 'trash-outline',
+  sync_success: 'cloud-done-outline',
+  sync_failed: 'cloud-offline-outline',
 };
 
 const ACTION_LABELS: Record<HistoryAction, string> = {
@@ -28,6 +29,16 @@ const ACTION_LABELS: Record<HistoryAction, string> = {
   sync_failed: 'Sync failed',
 };
 
+function actionColor(
+  action: HistoryAction,
+  colors: { danger: string; success: string; accent: string; textSecondary: string },
+): string {
+  if (action === 'sync_failed' || action === 'deleted') return colors.danger;
+  if (action === 'sync_success' || action === 'created') return colors.success;
+  if (action === 'status_changed') return colors.accent;
+  return colors.textSecondary;
+}
+
 export function HistoryScreen() {
   const { colors } = useTheme();
   const history = useTaskStore((s) => s.history);
@@ -40,14 +51,22 @@ export function HistoryScreen() {
         contentContainerStyle={history.length === 0 ? styles.emptyList : styles.list}
         ListEmptyComponent={
           <EmptyState
-            icon="📜"
+            icon="time-outline"
             title="No activity yet"
             subtitle="Task creation, edits, status changes and sync events will appear here."
           />
         }
         renderItem={({ item }) => (
           <View style={[styles.item, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <Text style={styles.icon}>{ACTION_ICONS[item.action]}</Text>
+            <View
+              style={[styles.iconCircle, { backgroundColor: `${actionColor(item.action, colors)}18` }]}
+            >
+              <Ionicons
+                name={ACTION_ICONS[item.action]}
+                size={17}
+                color={actionColor(item.action, colors)}
+              />
+            </View>
             <View style={styles.itemBody}>
               <Text style={[styles.actionLabel, { color: colors.textSecondary }]}>
                 {ACTION_LABELS[item.action]} · {item.taskTitle}
@@ -76,7 +95,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     gap: 12,
   },
-  icon: { fontSize: 20 },
+  iconCircle: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   itemBody: { flex: 1 },
   actionLabel: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.4 },
   description: { fontSize: 14, marginTop: 2 },

@@ -45,7 +45,12 @@ export function SettingsScreen() {
           {'\n'}Network: {isOnline ? 'online' : 'offline'}
           {'\n'}Pending changes: {pendingCount}
         </Text>
-        <AppButton label={isSyncing ? 'Syncing…' : 'Sync now'} onPress={runSync} loading={isSyncing} />
+        <AppButton
+          icon="sync-outline"
+          label={isSyncing ? 'Syncing…' : 'Sync now'}
+          onPress={runSync}
+          loading={isSyncing}
+        />
       </Section>
 
       <Section title="About">

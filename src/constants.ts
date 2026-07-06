@@ -1,7 +1,12 @@
 import type { TaskStatus } from './types';
 
-/** Unique candidate code from the recruiter. Shown on the Settings screen. */
-export const CANDIDATE_CODE = 'SA-RN-XXXX';
+/**
+ * The assignment mentions a unique candidate code, but the recruiter (Pavel)
+ * confirmed by email that no personal code is issued for this task.
+ * Candidate identity is shown instead.
+ */
+export const CANDIDATE_NAME = 'Daniil Nesterovich';
+export const CANDIDATE_NOTE = 'No personal candidate code — confirmed by recruiter via email';
 
 export const NOTIFICATION_LEAD_MINUTES = 30;
 /** Fallback delay when the due date is closer than the normal lead time */

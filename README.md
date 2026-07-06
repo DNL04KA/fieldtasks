@@ -1,6 +1,11 @@
 # FieldTasks — React Native Test Assignment
 
-> **Candidate code: `SA-RN-XXXX`**
+> **Candidate: Daniil Nesterovich** (nesterovichds0512@gmail.com)
+>
+> The assignment mentions a unique candidate code. I asked the recruiter for
+> mine before starting, and Pavel confirmed by email that **no personal
+> candidate code is issued for this task** — so candidate identity is shown
+> here and on the app's Settings screen instead.
 
 An internal productivity tool for field employees: create, plan, track, and review
 daily work tasks with locations, attachments, status changes, offline support, and
@@ -46,7 +51,7 @@ a full action history.
 src/
 ├── api/          # mock server client + base URL config
 ├── components/   # reusable UI (TaskCard, FormField, Chip, AttachmentGallery, …)
-├── constants.ts  # candidate code, status labels, presets, notification timings
+├── constants.ts  # candidate identity, status labels, presets, notification timings
 ├── hooks/        # useNetworkSync (NetInfo → store)
 ├── navigation/   # stack + tabs, typed param lists
 ├── screens/      # TaskList, TaskForm, TaskDetail, Map, History, Settings

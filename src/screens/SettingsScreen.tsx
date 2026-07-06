@@ -4,7 +4,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { useTaskStore } from '../store/taskStore';
 import { usePendingSyncCount } from '../store/selectors';
 import { AppButton } from '../components/AppButton';
-import { CANDIDATE_CODE, DEMO_NOTIFICATION_SECONDS } from '../constants';
+import { CANDIDATE_NAME, CANDIDATE_NOTE, DEMO_NOTIFICATION_SECONDS } from '../constants';
 import { API_BASE_URL } from '../api/config';
 
 export function SettingsScreen() {
@@ -59,10 +59,11 @@ export function SettingsScreen() {
           Test assignment build.
         </Text>
         <View style={[styles.codeBox, { backgroundColor: colors.surfaceAlt, borderColor: colors.border }]}>
-          <Text style={[styles.codeLabel, { color: colors.textSecondary }]}>Candidate code</Text>
-          <Text style={[styles.code, { color: colors.text }]} accessibilityLabel={`Candidate code ${CANDIDATE_CODE}`}>
-            {CANDIDATE_CODE}
+          <Text style={[styles.codeLabel, { color: colors.textSecondary }]}>Candidate</Text>
+          <Text style={[styles.code, { color: colors.text }]} accessibilityLabel={`Candidate ${CANDIDATE_NAME}`}>
+            {CANDIDATE_NAME}
           </Text>
+          <Text style={[styles.infoText, { color: colors.textSecondary }]}>{CANDIDATE_NOTE}</Text>
         </View>
       </Section>
     </ScrollView>

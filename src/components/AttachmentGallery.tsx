@@ -60,6 +60,7 @@ function AttachmentItem({
           accessibilityRole="button"
           accessibilityLabel={`Remove attachment ${attachment.name}`}
           onPress={() => onRemove(attachment.id)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           style={[styles.removeButton, { backgroundColor: colors.danger }]}
         >
           <Ionicons name="close" size={14} color="#fff" />

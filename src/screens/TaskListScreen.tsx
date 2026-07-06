@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, View, type ListRenderItem } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../theme/ThemeContext';
 import { useTaskStore } from '../store/taskStore';
@@ -10,7 +10,7 @@ import { EmptyState } from '../components/EmptyState';
 import { AppButton } from '../components/AppButton';
 import { STATUS_LABELS } from '../constants';
 import type { RootStackParamList } from '../navigation/types';
-import type { SortMode, TaskStatus } from '../types';
+import type { SortMode, Task, TaskStatus } from '../types';
 
 const SORT_OPTIONS: { mode: SortMode; label: string }[] = [
   { mode: 'createdAt', label: 'Date added' },
@@ -36,6 +36,15 @@ export function TaskListScreen({ navigation }: Props) {
   const isOnline = useTaskStore((s) => s.isOnline);
   const runSync = useTaskStore((s) => s.runSync);
   const pendingCount = usePendingSyncCount();
+
+  const handleOpenTask = useCallback(
+    (taskId: string) => navigation.navigate('TaskDetail', { taskId }),
+    [navigation],
+  );
+  const renderItem = useCallback<ListRenderItem<Task>>(
+    ({ item }) => <TaskCard task={item} onOpen={handleOpenTask} />,
+    [handleOpenTask],
+  );
 
   const syncLabel = !isOnline
     ? 'Offline — changes are saved locally'
@@ -68,7 +77,13 @@ export function TaskListScreen({ navigation }: Props) {
 
       <View style={styles.controls}>
         <Text style={[styles.controlLabel, { color: colors.textSecondary }]}>Sort by</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.chipRow}
+          accessibilityRole="radiogroup"
+          accessibilityLabel="Sort tasks by"
+        >
           {SORT_OPTIONS.map((opt) => (
             <Chip
               key={opt.mode}
@@ -79,7 +94,13 @@ export function TaskListScreen({ navigation }: Props) {
           ))}
         </ScrollView>
         <Text style={[styles.controlLabel, { color: colors.textSecondary }]}>Filter</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.chipRow}
+          accessibilityRole="radiogroup"
+          accessibilityLabel="Filter tasks by status"
+        >
           {FILTER_OPTIONS.map((f) => (
             <Chip
               key={f}
@@ -94,9 +115,7 @@ export function TaskListScreen({ navigation }: Props) {
       <FlatList
         data={tasks}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TaskCard task={item} onPress={() => navigation.navigate('TaskDetail', { taskId: item.id })} />
-        )}
+        renderItem={renderItem}
         contentContainerStyle={tasks.length === 0 && styles.emptyList}
         refreshing={isSyncing}
         onRefresh={runSync}

@@ -9,10 +9,11 @@ import type { Task } from '../types';
 
 interface TaskCardProps {
   task: Task;
-  onPress: () => void;
+  onOpen: (taskId: string) => void;
 }
 
-export function TaskCard({ task, onPress }: TaskCardProps) {
+/** Memoized: FlatList re-renders (search typing, sync spinner) skip unchanged rows. */
+export const TaskCard = React.memo(function TaskCard({ task, onOpen }: TaskCardProps) {
   const { colors, statusColor } = useTheme();
   const overdue = isOverdue(task.dueDate) && task.status !== 'completed' && task.status !== 'cancelled';
 
@@ -20,7 +21,7 @@ export function TaskCard({ task, onPress }: TaskCardProps) {
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`Open task ${task.title}`}
-      onPress={onPress}
+      onPress={() => onOpen(task.id)}
       style={({ pressed }) => [
         styles.card,
         {
@@ -73,7 +74,7 @@ export function TaskCard({ task, onPress }: TaskCardProps) {
       </View>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {

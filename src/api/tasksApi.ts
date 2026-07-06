@@ -18,6 +18,11 @@ async function request(path: string, init?: RequestInit): Promise<Response> {
       signal: controller.signal,
       headers: { 'Content-Type': 'application/json', ...init?.headers },
     });
+  } catch (error) {
+    if (controller.signal.aborted) {
+      throw new Error(`Request timed out after ${REQUEST_TIMEOUT_MS / 1000}s`);
+    }
+    throw error;
   } finally {
     clearTimeout(timer);
   }

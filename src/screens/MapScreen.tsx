@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -58,14 +58,36 @@ export function MapScreen() {
             pinColor={statusColor(task.status)}
             title={task.title}
             description={`${STATUS_LABELS[task.status]} · ${task.location.address}`}
+            accessibilityLabel={`Task ${task.title}, ${STATUS_LABELS[task.status]}`}
             onCalloutPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
           />
         ))}
       </MapView>
-      <View style={[styles.hintBar, { backgroundColor: colors.surface }]}>
+      {/* List fallback: native map markers are unreachable for screen readers */}
+      <View style={[styles.bottomBar, { backgroundColor: colors.surface }]}>
         <Text style={[styles.hint, { color: colors.textSecondary }]}>
-          Tap a marker, then tap its callout to open the task
+          Tap a marker or open a task directly:
         </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.pillRow}
+        >
+          {tasks.map((task) => (
+            <Pressable
+              key={task.id}
+              accessibilityRole="button"
+              accessibilityLabel={`Open task ${task.title}`}
+              onPress={() => navigation.navigate('TaskDetail', { taskId: task.id })}
+              style={[styles.pill, { borderColor: statusColor(task.status) }]}
+            >
+              <View style={[styles.pillDot, { backgroundColor: statusColor(task.status) }]} />
+              <Text style={[styles.pillLabel, { color: colors.text }]} numberOfLines={1}>
+                {task.title}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -74,6 +96,27 @@ export function MapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { flex: 1 },
-  hintBar: { position: 'absolute', bottom: 16, left: 16, right: 16, borderRadius: 12, padding: 12 },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    borderRadius: 14,
+    paddingVertical: 10,
+    gap: 8,
+  },
   hint: { fontSize: 13, textAlign: 'center' },
+  pillRow: { gap: 8, paddingHorizontal: 12 },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    borderWidth: 1.5,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    minHeight: 44,
+    maxWidth: 220,
+  },
+  pillDot: { width: 8, height: 8, borderRadius: 4 },
+  pillLabel: { fontSize: 14, fontWeight: '600', flexShrink: 1 },
 });

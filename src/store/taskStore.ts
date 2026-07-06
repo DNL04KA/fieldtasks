@@ -70,8 +70,12 @@ export const useTaskStore = create<TaskStoreState>((set, get) => {
   const commit = (tasks: Task[], newEntries: HistoryEntry[]) => {
     const history = [...newEntries.reverse(), ...get().history].slice(0, HISTORY_LIMIT);
     set({ tasks, history });
-    taskStorage.saveTasks(tasks).catch(() => {});
-    taskStorage.saveHistory(history).catch(() => {});
+    taskStorage
+      .saveTasks(tasks)
+      .catch((error) => console.warn('[store] persisting tasks failed', error));
+    taskStorage
+      .saveHistory(history)
+      .catch((error) => console.warn('[store] persisting history failed', error));
   };
 
   return {
@@ -240,12 +244,40 @@ export const useTaskStore = create<TaskStoreState>((set, get) => {
     },
 
     runSync: async () => {
-      const { isSyncing, isOnline, tasks } = get();
+      const { isSyncing, isOnline, tasks: snapshot } = get();
       if (isSyncing || !isOnline) return;
 
       set({ isSyncing: true });
+      let needsAnotherPass = false;
       try {
-        const outcome = await syncTasks(tasks);
+        const outcome = await syncTasks(snapshot);
+
+        // Merge against the *current* state, not the snapshot: the user may
+        // have edited tasks while the sync round-trip was in flight, and those
+        // edits must survive (they are pushed by the follow-up pass below).
+        const snapshotById = new Map(snapshot.map((t) => [t.id, t]));
+        const outcomeById = new Map(outcome.tasks.map((t) => [t.id, t]));
+        const current = get().tasks;
+
+        const merged: Task[] = [];
+        for (const task of current) {
+          const before = snapshotById.get(task.id);
+          // Reference equality is reliable because the store is immutable:
+          // any mutation during the sync round-trip produced a new object
+          const mutatedDuringSync = before !== task;
+          if (mutatedDuringSync) {
+            merged.push(task);
+            continue;
+          }
+          const fromSync = outcomeById.get(task.id);
+          // Absent from the outcome means the tombstone reached the server
+          if (fromSync) merged.push(fromSync);
+        }
+        const currentIds = new Set(current.map((t) => t.id));
+        for (const task of outcome.tasks) {
+          if (!currentIds.has(task.id)) merged.push(task);
+        }
+
         const entries = outcome.events.map((e) =>
           historyEntry(
             { id: e.taskId, title: e.taskTitle },
@@ -253,10 +285,15 @@ export const useTaskStore = create<TaskStoreState>((set, get) => {
             e.description,
           ),
         );
-        commit(outcome.tasks, entries);
+        commit(merged, entries);
+        needsAnotherPass = merged.some((t) => t.syncStatus === 'pending');
+      } catch (error) {
+        // Sync must never crash the app: failures stay local and retriable
+        console.warn('[sync] unexpected failure', error);
       } finally {
         set({ isSyncing: false });
       }
+      if (needsAnotherPass) void get().runSync();
     },
 
     setOnline: (online) => {

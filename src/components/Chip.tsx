@@ -16,6 +16,7 @@ export function Chip({ label, active, onPress }: ChipProps) {
       accessibilityState={{ selected: active }}
       accessibilityLabel={label}
       onPress={onPress}
+      hitSlop={{ top: 6, bottom: 6, left: 4, right: 4 }}
       style={[
         styles.chip,
         {
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    minHeight: 36,
+    minHeight: 44,
     justifyContent: 'center',
   },
   label: { fontSize: 13, fontWeight: '600' },

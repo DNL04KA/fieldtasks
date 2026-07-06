@@ -137,7 +137,7 @@ committed.
 ## Tests
 
 ```bash
-npm test        # 15 unit tests: validation rules + sync merge logic
+npm test        # 17 unit tests: validation, sync merge logic, store race handling
 npm run typecheck
 ```
 
@@ -151,6 +151,17 @@ npm run typecheck
   retried on the next trigger (mutation, reconnect, manual).
 - The demo notification mode applies to tasks saved *after* enabling it.
 - History log is capped at 300 entries to bound storage growth.
+- In a multi-device scenario the LWW pull would replace local attachment file
+  URIs with another device's paths; acceptable here because the mock server is
+  single-user — a real backend needs actual attachment upload/download.
+- Notification scheduling and the store commit are not atomic: if the app is
+  killed between them, an orphaned reminder can fire once for an unsaved change.
+- ESLint (`eslint-plugin-react-hooks`) is not configured — hook correctness was
+  verified by review and unit tests; adding `eslint-config-expo` would be the
+  first follow-up for a production project.
+- Native map markers are not reachable by screen readers (react-native-maps
+  limitation) — the Map screen ships a task-pill fallback bar as an accessible
+  alternative path to open tasks.
 
 ## AI / tooling disclosure
 

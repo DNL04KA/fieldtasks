@@ -148,6 +148,11 @@ npm run typecheck
 
 ## Known limitations & trade-offs
 
+- `android.usesCleartextTraffic: true` is enabled because the mock json-server
+  speaks plain HTTP and Android release builds block cleartext by default
+  (found during live APK testing — sync silently failed in the release build
+  until this was allowed). A production app would use HTTPS and drop the flag.
+
 - Last-write-wins by `updatedAt` relies on device clocks; a real backend would use
   server timestamps or version vectors.
 - Attachment binaries are not uploaded to the mock server — only metadata syncs

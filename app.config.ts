@@ -44,6 +44,10 @@ const config: ExpoConfig = {
   },
   owner: 'dnlkkk',
   plugins: [
+    // Release builds block plain-HTTP by default; the mock json-server is
+    // http://, so cleartext must be allowed for sync to work from the APK.
+    // A production app would talk HTTPS and drop this flag.
+    ['expo-build-properties', { android: { usesCleartextTraffic: true } }],
     '@react-native-community/datetimepicker',
     ['expo-notifications', {}],
     [

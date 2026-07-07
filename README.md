@@ -39,7 +39,7 @@ a full action history.
 | State            | Zustand                             | Tiny API, no boilerplate, selector-based re-renders, easy to test    |
 | Local storage    | AsyncStorage                        | Data volume is small; a thin typed storage layer keeps it swappable  |
 | Navigation       | React Navigation (stack + tabs)     | De facto standard                                                    |
-| Map              | react-native-maps                   | Assignment-recommended                                               |
+| Map              | Leaflet + OpenStreetMap (WebView)   | No API key needed; Google Maps SDK crashes on Android without one    |
 | Notifications    | expo-notifications                  | Local scheduled notifications with channels on Android               |
 | Attachments      | expo-image-picker / document-picker | Images required, PDFs as bonus; files copied into app storage        |
 | Connectivity     | @react-native-community/netinfo     | Online/offline detection triggers auto-sync                          |
@@ -76,8 +76,8 @@ npm run mock-server
 npm run android        # or: npm start, then open in a dev build
 ```
 
-The dev client / APK is required (not Expo Go) because of react-native-maps and
-notifications. See build instructions below.
+The dev client / APK is required (not Expo Go) because of notifications and the
+WebView-based map. See build instructions below.
 
 **Mock server URL:** the app defaults to `http://10.0.2.2:3001` on Android
 emulators and `http://localhost:3001` on iOS. For a **physical device**, set your
@@ -103,11 +103,12 @@ cd android && ./gradlew assembleRelease
 # APK: android/app/build/outputs/apk/release/app-release.apk
 ```
 
-### Google Maps key
+### Map keys
 
-A key is optional for development. For release builds copy `.env.example` to `.env`
-and set `GOOGLE_MAPS_API_KEY` — it is injected through `app.config.ts` and never
-committed.
+Not needed. The map is Leaflet + OpenStreetMap inside a WebView, so no Google
+Maps API key (and no billing-enabled Google Cloud account) is required. This
+was a deliberate switch: the Google Maps SDK hard-crashes Android release
+builds when no API key is present.
 
 ## Architecture notes
 
@@ -169,9 +170,11 @@ npm run typecheck
 - ESLint (`eslint-plugin-react-hooks`) is not configured — hook correctness was
   verified by review and unit tests; adding `eslint-config-expo` would be the
   first follow-up for a production project.
-- Native map markers are not reachable by screen readers (react-native-maps
-  limitation) — the Map screen ships a task-pill fallback bar as an accessible
+- Map markers live inside a WebView (Leaflet) and are not reachable by screen
+  readers — the Map screen ships a task-pill fallback bar as an accessible
   alternative path to open tasks.
+- Map tiles need internet (OpenStreetMap); offline, the map is blank but the
+  task-pill fallback bar still opens tasks.
 
 ## AI / tooling disclosure
 

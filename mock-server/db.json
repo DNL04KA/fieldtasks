@@ -27,10 +27,19 @@
         "longitude": -74.1724
       },
       "status": "in_progress",
-      "attachments": [],
+      "attachments": [
+        {
+          "id": "mr9vl759-04lsw8j9",
+          "uri": "file:///data/user/0/com.fieldtasks.app/files/attachments/mr9vl6zt-0um58jdt-34.png",
+          "name": "34.png",
+          "mimeType": "image/png",
+          "size": 1378159,
+          "addedAt": "2026-07-06T23:53:05.901Z"
+        }
+      ],
       "deleted": false,
       "createdAt": "2026-07-02T08:15:00.000Z",
-      "updatedAt": "2026-07-03T11:40:00.000Z"
+      "updatedAt": "2026-07-06T23:53:05.901Z"
     }
   ]
 }

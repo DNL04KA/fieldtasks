@@ -173,7 +173,7 @@ npm run typecheck
 
 ## AI / tooling disclosure
 
-AI assistance (Claude) was used for scaffolding, boilerplate, and this README.
+An AI coding assistant was used for scaffolding, boilerplate, and this README.
 All architectural decisions (offline-first store as single writer, two-phase
 sync with tombstones and LWW, attachment copy-to-app-storage) were reviewed and
 are fully understood by me; I can walk through any module in a follow-up review.

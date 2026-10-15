@@ -1,15 +1,10 @@
-# FieldTasks — React Native Test Assignment
+# FieldTasks
 
-> **Candidate: Daniil Nesterovich** (nesterovichds0512@gmail.com)
->
-> The assignment mentions a unique candidate code. I asked the recruiter for
-> mine before starting, and Pavel confirmed by email that **no personal
-> candidate code is issued for this task** — so candidate identity is shown
-> here and on the app's Settings screen instead.
+An offline-first React Native app for field employees: daily work tasks with locations, attachments, sync and history.
 
-An internal productivity tool for field employees: create, plan, track, and review
-daily work tasks with locations, attachments, status changes, offline support, and
-a full action history.
+Create, plan, track, and review daily work tasks with locations, attachments,
+status changes, offline support, and a full action history. Built as a React
+Native test assignment.
 
 ## Main features
 
